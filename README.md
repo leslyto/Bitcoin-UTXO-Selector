@@ -1,8 +1,11 @@
-#Unspent Transaction Output (UTXO) Selector Service for wallet software
-##Description
+# Unspent Transaction Output (UTXO) Selector Service for wallet software
+
+## Description
+
 In the Bitcoin ecosystem, a user's balance isn't stored as a single figure but is represented by multiple UTXOs (Unspent Transaction Outputs) scattered across the blockchain. These UTXOs represent indivisible chunks of Bitcoin associated with a user's address. When making transactions, users need to use these UTXOs as inputs, similar to how you'd use physical coins and banknotes to make a purchase. The challenge lies in choosing the right combination of UTXOs to satisfy a particular amount, without overspending (since UTXOs are indivisible). This service provides a solution to that challenge by automating the UTXO selection process.
 
-##Problem Statement
+## Problem Statement
+
 When making a transaction, the wallet software has to decide which UTXOs to spend in order to cover the transaction amount, similar to how a shopper selects coins and banknotes to cover a purchase. This process is non-trivial due to the indivisible nature of UTXOs.
 
 The task is to implement a UTXO selection strategy that:
@@ -13,7 +16,8 @@ The task is to implement a UTXO selection strategy that:
 
 The service fetches UTXO data from an external source (https://blockchain.info/unspent?active=address) and then applies the aforementioned strategies to select the optimal UTXOs for the desired transaction amount.
 
-##Solution and explanation
+## Solution and explanation
+
 The endpoint `/api/prepare-unspent-outputs` accepts an `address` and `amount` as query parameters. It returns a list of UTXOs for the given address that satisfy the purchase amount using the predefined strategies.
 
 Separated the logic of the 3 strategies into separate functions:
@@ -22,7 +26,7 @@ Separated the logic of the 3 strategies into separate functions:
 - If strategy 0 fails ( no exact match was found ), we try **strategy 1** - **`findSmallestUtxos`** This function is trying to find a combination of UTXOs that add up to the target amount or more by starting from the smallest UTXOs first. This is done by filtering out all UTXOs that are larger than the target amount, and then adding the smallest UTXOs to the **`smallestUtxos`** array until their total value meets or exceeds the target amount. If such a combination of UTXOs is found, it's returned; otherwise, null is returned.
 - If the above two strategies do not yield a result, the function **`findLargerUtxo`** tries to find the smallest UTXO that is still larger than the target amount. This is a straightforward linear search: it goes through each UTXO and checks if its value is larger than the target amount. As soon as such a UTXO is found, it is returned as a single-element array. If no such UTXO is found, null is returned indicating that the wallet doesn't have enough funds.
 
-##Examples
+## Examples
 
 - **Strategy Zero Succeeds**
   Given UTXOs: [3, 8, 6, 9, 1]
@@ -44,12 +48,14 @@ Separated the logic of the 3 strategies into separate functions:
   Purchase Amount: 28
   Result: 'Not enough funds' error.
 
-##Testing
+## Testing
+
 After implementing the solution, you can test its accuracy by executing:
 
 ```
 npm run test
 ```
 
-##Purpose
+## Purpose
+
 This tool aims to simplify the often complex and non-intuitive process of UTXO selection for Bitcoin transactions. By implementing intelligent strategies for UTXO aggregation, it ensures efficient transaction creation, reducing costs and maximizing user control over their transaction outputs. This service abstracts away the intricacies of UTXO management, making the process of transaction creation more user-friendly and efficient.
