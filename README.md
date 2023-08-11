@@ -1,4 +1,4 @@
-# Unspent Transaction Output (UTXO) Selector Service for wallet software
+# Bitcoin Unspent Transaction Output (UTXO) Selector Service for wallet software
 
 ## Description
 
