@@ -48,7 +48,7 @@ Separated the logic of the 3 strategies into separate functions:
   Purchase Amount: 5
   Result: [6]
 
-- **Both Strategies Fail:**
+- **All Strategies Fail:**
 
   Given UTXOs: [3, 8, 6, 9, 1]
   Purchase Amount: 28
