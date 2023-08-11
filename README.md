@@ -11,7 +11,9 @@ When making a transaction, the wallet software has to decide which UTXOs to spen
 The task is to implement a UTXO selection strategy that:
 
 <b>Strategy Zero</b>: It looks for an exact match or combination of UTXOs that equals the purchase amount.
+
 <b>First Strategy</b>: Tries to combine smaller UTXOs to satisfy the purchase amount. This is analogous to a shopper trying to pay using as many coins as possible before resorting to banknotes.
+
 <b>Second Strategy</b>: If the first strategy fails, it looks for the smallest UTXO that is larger than the purchase amount. This is similar to a shopper paying with a larger banknote when they don't have enough coins.
 
 The service fetches UTXO data from an external source (https://blockchain.info/unspent?active=address) and then applies the aforementioned strategies to select the optimal UTXOs for the desired transaction amount.
@@ -29,21 +31,25 @@ Separated the logic of the 3 strategies into separate functions:
 ## Examples
 
 - **Strategy Zero Succeeds**
+
   Given UTXOs: [3, 8, 6, 9, 1]
   Purchase Amount: 6
   Result: [6]
 
 - **Strategy Zero fails, First Strategy Succeeds**
+
   Given UTXOs: [3, 8, 6, 9, 1]
   Purchase Amount: 4
   Result: [1, 3]
 
 - **First Strategy Fails, Second Strategy Succeeds:**
+
   Given UTXOs: [3, 8, 6, 9, 1]
   Purchase Amount: 5
   Result: [6]
 
 - **Both Strategies Fail:**
+
   Given UTXOs: [3, 8, 6, 9, 1]
   Purchase Amount: 28
   Result: 'Not enough funds' error.
